@@ -328,6 +328,11 @@ export class Hud {
   }
 
   setAssetReport(report: AssetReport): void {
+    this.root.querySelector('.asset-warning')?.remove();
+    if (report.issues.length) {
+      const notice = el('div', { class: 'asset-warning', attrs: { role: 'status' } }, [el('span', { text: '部分素材加载失败，暂以简化模型显示。' })]);
+      const retry = document.createElement('button'); retry.textContent = '重新加载缺失素材'; retry.onclick = () => location.reload(); notice.append(retry); this.root.append(notice);
+    }
     if (report.issues.length === 0) {
       this.issues.textContent = `资产：${report.loadedModels.length} 个扫描模型、${report.loadedTiles.length} 组平铺贴图${report.envLoaded ? '、环境光' : ''} 全部就位。`;
       return;

@@ -1669,3 +1669,6 @@ body {
   .app-dock { width:min(268px, calc(100vw - 16px)); max-height:calc(100% - 72px); }
   .phone { min-height:0; }
 }
+
+.asset-warning { position:absolute;z-index:9;top:10px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 20px);background:#fff7e6;color:#493b24;border:1px solid #cba569;border-radius:8px;padding:12px;font-size:14px; }
+.asset-warning button { margin-left:8px;padding:6px 10px;border:1px solid #ad8f5c;border-radius:5px;background:#fff;font:inherit;cursor:pointer; }
