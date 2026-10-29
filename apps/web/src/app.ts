@@ -19,7 +19,26 @@ export function mountApp(root: HTMLElement): () => void {
   ]);
 
   const host = el('main', { class: 'screen-host' });
-  root.append(topbar, host);
+  const controls = el('button', { class: 'mobile-controls', text: '场景操作', attrs: { 'aria-expanded': 'false' } });
+  root.append(topbar, host, controls);
+  const mobile = matchMedia('(max-width: 600px)');
+  const closeControls = () => { root.classList.remove('controls-open'); controls.setAttribute('aria-expanded', 'false'); };
+  controls.onclick = () => {
+    const open = !root.classList.contains('controls-open');
+    if (open) host.querySelector<HTMLButtonElement>('.app-dock[data-collapsed="false"] .app-dock-toggle')?.click();
+    root.classList.toggle('controls-open', open);
+    controls.setAttribute('aria-expanded', String(open));
+  };
+  const onHostClick = (event: Event) => {
+    if (mobile.matches && (event.target as HTMLElement).closest('.app-dock-toggle')) closeControls();
+  };
+  // A resize into the mobile layout should behave like a fresh mobile visit.
+  const onResize = () => {
+    if (mobile.matches) host.querySelector<HTMLButtonElement>('.app-dock[data-collapsed="false"] .app-dock-toggle')?.click();
+    closeControls();
+  };
+  host.addEventListener('click', onHostClick);
+  mobile.addEventListener('change', onResize);
 
   const router = new Router(
     [
@@ -29,7 +48,7 @@ export function mountApp(root: HTMLElement): () => void {
       { id: 'dog', label: '狗的生活场景', mount: mountDogScreen },
       { id: 'vitals', label: '生理读数', mount: mountVitalsScreen },
       { id: 'resources', label: '居家资源', mount: mountResourcesScreen },
-      { id: 'status', label: '工程自检', mount: mountStatusScreen },
+      ...(new URLSearchParams(location.search).has('debug') ? [{ id: 'status', label: '工程自检', mount: mountStatusScreen }] : []),
     ],
     'home',
     host,
@@ -38,6 +57,9 @@ export function mountApp(root: HTMLElement): () => void {
   router.start();
 
   return () => {
+    mobile.removeEventListener('change', onResize);
+    host.removeEventListener('click', onHostClick);
+    controls.remove();
     router.dispose();
     topbar.remove();
     host.remove();

@@ -335,6 +335,7 @@ export class DogHud {
     this.issues.textContent = `有 ${report.issues.length} 项资产未就位，已用程序化占位件顶上：${report.issues
       .map((i) => `${i.id}（${i.reason}）`)
       .join('；')}`;
+    const retry = document.createElement('button'); retry.textContent = '重新加载缺失素材'; retry.onclick = () => location.reload(); this.issues.append(retry);
   }
 
   setStats(stats: DogSceneStats): void {
@@ -366,6 +367,7 @@ export class DogHud {
         }),
       ]),
     );
+    const retry = document.createElement('button'); retry.textContent = '重新加载'; retry.onclick = () => location.reload(); this.fatal.querySelector('.loading-card')?.append(retry);
   }
 
   private switchRow(label: string, initial: boolean, onChange: (on: boolean) => void): HTMLElement {

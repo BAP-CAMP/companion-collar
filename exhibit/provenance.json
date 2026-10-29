@@ -1,0 +1,16 @@
+{
+  "title": "宠物智慧项圈",
+  "slug": "companion-collar",
+  "upstream": "https://github.com/Yuki6722/companion-collar",
+  "fork": "https://github.com/BAP-CAMP/companion-collar",
+  "base": "c94b58d953be6a603ab95d94aecab401d7dcad53",
+  "authors": [
+    "Yuki6722",
+    "Inkstone00",
+    "jeffliulab"
+  ],
+  "device": "电脑或手机，支持 WebGL。",
+  "note": "宠物场景与读数为合成演示，项圈画面不等于宠物感受。",
+  "adoptedBranch": "main",
+  "repositoryVisibility": "public"
+}

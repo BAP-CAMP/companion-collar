@@ -35,3 +35,8 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+
+# Local Collective build and verification artifacts
+/exhibit-dist/
+/temp/
+/.tools/

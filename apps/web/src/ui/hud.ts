@@ -161,8 +161,7 @@ export class Hud {
     const catPanel = el('section', { class: 'panel panel-cat' }, [
       el('h2', { class: 'panel-title', text: '喵喵的行为' }),
       el('p', { class: 'state-hint' }, [
-        el('a', { text: '模型与动作检查', attrs: { href: './cat-studio.html' } }),
-        document.createTextNode(' · '),
+        ...(new URLSearchParams(location.search).has('debug') ? [el('a', { text: '模型与动作检查', attrs: { href: './cat-studio.html' } }), document.createTextNode(' · ')] : []),
         el('a', { text: '模型来源', attrs: { href: './assets/models/CREDITS-CATS.md', target: '_blank', rel: 'noopener' } }),
       ]),
       modeRow,
@@ -336,6 +335,7 @@ export class Hud {
     this.issues.textContent = `有 ${report.issues.length} 项资产未就位，已用程序化占位件顶上：${report.issues
       .map((i) => `${i.id}（${i.reason}）`)
       .join('；')}`;
+    const retry = document.createElement('button'); retry.textContent = '重新加载缺失素材'; retry.onclick = () => location.reload(); this.issues.append(retry);
   }
 
   setStats(stats: SceneStats): void {
@@ -353,10 +353,11 @@ export class Hud {
         el('p', { class: 'panel-foot', text: message }),
         el('p', {
           class: 'panel-foot',
-          text: '右侧的居家资源清单不依赖 3D，仍然可用；你也可以切到「工程自检」查看数据链路。',
+          text: '可从顶部打开居家资源清单，或重新加载场景。',
         }),
       ]),
     );
+    const retry = document.createElement('button'); retry.textContent = '重新加载'; retry.onclick = () => location.reload(); this.fatal.querySelector('.loading-card')?.append(retry);
   }
 
   private switchRow(label: string, initial: boolean, onChange: (on: boolean) => void): HTMLElement {

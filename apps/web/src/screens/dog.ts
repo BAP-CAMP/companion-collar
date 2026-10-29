@@ -264,7 +264,7 @@ export function mountDogScreen(host: HTMLElement): () => void {
     if (probeMs) scene.startMotionProbe(Number(probeMs) / 1000);
 
     // 资产请求可能整体失败（例如直接以 file:// 打开）：超时兜底关闭加载层
-    window.setTimeout(() => hud.finishLoading(), 12000);
+    // Completion comes from the loader callback, never from an elapsed timer.
   } catch (err) {
     hud.finishLoading();
     hud.showFatal(

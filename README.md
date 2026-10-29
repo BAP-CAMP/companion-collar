@@ -181,3 +181,10 @@ scripts/              构建 · three vendoring · 资产抓取 · 禁词门禁 
 ## 免责声明
 
 本项目为研究与设计转译产物，**不构成兽医诊断或治疗建议**。仿真数据不是真实测量。任何生理读数都不应作为临床决策依据；宠物健康问题请咨询执业兽医。
+
+
+## Collective 展示适配
+
+原作者、采用版本及贡献记录见 [ATTRIBUTION.md](ATTRIBUTION.md)。
+独立静态入口：`/demo/companion-collar/`。官网只加载静态封面，点击后才进入交互。
+构建与验收见 [exhibit/README.md](exhibit/README.md)。

@@ -389,7 +389,7 @@ export class DogHomeScene {
     this.onResizeBound = () => this.resize();
     this.onVisibilityBound = () => {
       this.hidden = document.hidden;
-      this.setLoopActive(!this.hidden && !this.disposed);
+      this.setLoopActive(!this.hidden && !this.disposed && !document.documentElement.dataset.exhibitPaused);
     };
     this.onContextLostBound = (event: Event) => {
       event.preventDefault();
@@ -398,6 +398,8 @@ export class DogHomeScene {
     };
     window.addEventListener('resize', this.onResizeBound);
     document.addEventListener('visibilitychange', this.onVisibilityBound);
+    window.addEventListener('exhibit:pause', this.onVisibilityBound);
+    window.addEventListener('exhibit:resume', this.onVisibilityBound);
     renderer.domElement.addEventListener('webglcontextlost', this.onContextLostBound);
   }
 
@@ -410,7 +412,7 @@ export class DogHomeScene {
 
   private setLoopActive(active: boolean): void {
     if (this.disposed) return;
-    if (active && this.running) this.renderer.setAnimationLoop(() => this.tick());
+    if (active && this.running && !document.documentElement.dataset.exhibitPaused) { this.clock.getDelta(); this.renderer.setAnimationLoop(() => this.tick()); }
     else this.renderer.setAnimationLoop(null);
   }
 
@@ -1212,6 +1214,8 @@ export class DogHomeScene {
     this.renderer.setAnimationLoop(null);
     window.removeEventListener('resize', this.onResizeBound);
     document.removeEventListener('visibilitychange', this.onVisibilityBound);
+    window.removeEventListener('exhibit:pause', this.onVisibilityBound);
+    window.removeEventListener('exhibit:resume', this.onVisibilityBound);
     this.renderer.domElement.removeEventListener('webglcontextlost', this.onContextLostBound);
     this.controls.dispose();
     this.labelLayer.dispose();

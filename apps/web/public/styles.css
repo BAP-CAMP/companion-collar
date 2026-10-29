@@ -1654,3 +1654,18 @@ body {
   background: currentColor;
   opacity: 0.5;
 }
+
+/* Collective: give the scene the full narrow screen; open one panel at a time. */
+.mobile-controls { display:none; }
+@media (max-width:600px) {
+  .topbar { height:auto; align-items:stretch; flex-direction:column; gap:8px; padding:10px 12px; }
+  .brand, .nav-btn { white-space:nowrap; }
+  .nav { overflow-x:auto; padding-bottom:3px; flex-shrink:0; }
+  .nav-btn { flex-shrink:0; }
+  .mobile-controls { display:block; position:fixed; left:8px; bottom:60px; z-index:8; border:1px solid var(--line); background:var(--panel); border-radius:10px; padding:10px 16px; color:var(--ink); font:inherit; }
+  .hud-panels { display:none; width:calc(100% - 16px); max-height:calc(100% - 120px); z-index:7; }
+  .controls-open .hud-panels { display:flex; }
+  .app-dock, .app-dock[data-collapsed='true'] { bottom:60px; }
+  .app-dock { width:min(268px, calc(100vw - 16px)); max-height:calc(100% - 72px); }
+  .phone { min-height:0; }
+}

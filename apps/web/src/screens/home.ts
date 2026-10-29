@@ -243,7 +243,7 @@ export function mountHomeScreen(host: HTMLElement): () => void {
     const view = params0.get('view');
     if (view) scene.preset(view, true);
     // 资产请求可能整体失败（例如直接以 file:// 打开）：超时兜底关闭加载层
-    window.setTimeout(() => hud.finishLoading(), 12000);
+    // Completion comes from the loader callback, never from an elapsed timer.
   } catch (err) {
     hud.finishLoading();
     hud.showFatal(
