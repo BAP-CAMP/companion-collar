@@ -12,5 +12,7 @@
   "device": "电脑或手机，支持 WebGL。",
   "note": "宠物场景与读数为合成演示，项圈画面不等于宠物感受。",
   "adoptedBranch": "main",
-  "repositoryVisibility": "public"
+  "repositoryVisibility": "public",
+  "team": "宠物项圈小组",
+  "attributionType": "Camp001 参赛小组"
 }

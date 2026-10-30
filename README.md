@@ -188,3 +188,7 @@ scripts/              构建 · three vendoring · 资产抓取 · 禁词门禁 
 原作者、采用版本及贡献记录见 [ATTRIBUTION.md](ATTRIBUTION.md)。
 独立静态入口：`/demo/companion-collar/`。官网只加载静态封面，点击后才进入交互。
 构建与验收见 [exhibit/README.md](exhibit/README.md)。
+
+### Collective 公开署名
+
+Camp001 参赛小组：**宠物项圈小组**。BAP 负责官网展示适配与交互改进；原始 Git 贡献者及素材来源见 [ATTRIBUTION.md](ATTRIBUTION.md)。

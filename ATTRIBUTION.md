@@ -1,5 +1,7 @@
 # 原作与展示适配
 
+公开作品署名：**宠物项圈小组**（Camp001 参赛小组，2026-10-30 确认）。以下 GitHub 标识保留为原始贡献记录，不用于推断学生真实姓名或分工。
+
 原作：[Yuki6722/companion-collar](https://github.com/Yuki6722/companion-collar)。
 
 采用版本：`c94b58d953be6a603ab95d94aecab401d7dcad53`。原始提交历史完整保留。
