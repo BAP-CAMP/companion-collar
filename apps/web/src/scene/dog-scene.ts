@@ -410,10 +410,14 @@ export class DogHomeScene {
     this.setLoopActive(!this.hidden);
   }
 
+  private loopActive = false;
   private setLoopActive(active: boolean): void {
     if (this.disposed) return;
-    if (active && this.running && !document.documentElement.dataset.exhibitPaused) { this.clock.getDelta(); this.renderer.setAnimationLoop(() => this.tick()); }
-    else this.renderer.setAnimationLoop(null);
+    const next = active && this.running && !document.documentElement.dataset.exhibitPaused;
+    if (next === this.loopActive) return;
+    this.loopActive = next;
+    if (next) { const elapsed = this.clock.elapsedTime; this.clock.start(); this.clock.elapsedTime = elapsed; this.renderer.setAnimationLoop(() => this.tick()); }
+    else { this.clock.stop(); this.renderer.setAnimationLoop(null); }
   }
 
   setQuality(choice: QualityChoice): void {
@@ -594,12 +598,12 @@ export class DogHomeScene {
       g.add(mesh);
     }
     this.vomitRoot.add(g);
-    this.vomitPuddles.push({ obj: g, expiresAtMs: performance.now() + VOMIT_LINGER_S * 1000 });
+    this.vomitPuddles.push({ obj: g, expiresAtMs: (this.clock.elapsedTime * 1000) + VOMIT_LINGER_S * 1000 });
   }
 
   /** 到期的呕吐物逐帧清理（几何随之 dispose，材质共用、留到场景销毁）。 */
   private expireVomitMatter(): void {
-    const now = performance.now();
+    const now = (this.clock.elapsedTime * 1000);
     for (let i = this.vomitPuddles.length - 1; i >= 0; i--) {
       const item = this.vomitPuddles[i];
       if (!item || now < item.expiresAtMs) continue;
@@ -716,7 +720,7 @@ export class DogHomeScene {
     g.add(ring);
 
     this.splashRoot.add(g);
-    this.splashes.push({ obj: g, bornAtMs: performance.now(), ring, ringMaterial });
+    this.splashes.push({ obj: g, bornAtMs: (this.clock.elapsedTime * 1000), ring, ringMaterial });
     this.splashSpawned += 1;
   }
 
@@ -728,7 +732,7 @@ export class DogHomeScene {
    * 留到 `dispose()`）—— 归属写清楚，就不会出现"每簇漏一份材质"或"共用的被提前销毁"。
    */
   private expireSplash(): void {
-    const now = performance.now();
+    const now = (this.clock.elapsedTime * 1000);
     for (let i = this.splashes.length - 1; i >= 0; i--) {
       const item = this.splashes[i];
       if (!item) continue;
@@ -1106,7 +1110,7 @@ export class DogHomeScene {
     const buffer = this.povBuffer;
     if (!canvas || !ctx || !target || !cam || !lens || !rig || !buffer) return;
 
-    const wall = performance.now();
+    const wall = (this.clock.elapsedTime * 1000);
     const intervalMs = 1000 / POV_FPS;
     if (wall - this.povLastMs < intervalMs) return;
     // 用固定步长推进"上一次"而不是直接赋值 now：帧率低于 POV_FPS 时不会积攒出一个

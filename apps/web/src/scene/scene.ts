@@ -358,10 +358,14 @@ export class HomeScene {
     this.setLoopActive(!this.hidden);
   }
 
+  private loopActive = false;
   private setLoopActive(active: boolean): void {
     if (this.disposed) return;
-    if (active && this.running && !document.documentElement.dataset.exhibitPaused) { this.clock.getDelta(); this.renderer.setAnimationLoop(() => this.tick()); }
-    else this.renderer.setAnimationLoop(null);
+    const next = active && this.running && !document.documentElement.dataset.exhibitPaused;
+    if (next === this.loopActive) return;
+    this.loopActive = next;
+    if (next) { const elapsed = this.clock.elapsedTime; this.clock.start(); this.clock.elapsedTime = elapsed; this.renderer.setAnimationLoop(() => this.tick()); }
+    else { this.clock.stop(); this.renderer.setAnimationLoop(null); }
   }
 
   setQuality(choice: QualityChoice): void {
@@ -918,7 +922,7 @@ export class HomeScene {
     const buffer = this.povBuffer;
     if (!canvas || !ctx || !target || !cam || !rig || !buffer) return;
 
-    const wall = performance.now();
+    const wall = (this.clock.elapsedTime * 1000);
     const intervalMs = 1000 / POV_FPS;
     if (wall - this.povLastMs < intervalMs) return;
     // 用固定步长推进"上一次"而不是直接赋值 now：这样在帧率低于 POV_FPS 时
@@ -983,7 +987,7 @@ export class HomeScene {
    * 而瞬移会在两帧之间产生每秒几十米的尖峰。
    */
   startMotionProbe(durationS: number): void {
-    this.probe = { until: performance.now() + Math.max(0.2, durationS) * 1000, samples: [] };
+    this.probe = { until: (this.clock.elapsedTime * 1000) + Math.max(0.2, durationS) * 1000, samples: [] };
   }
 
   /** 自检用：位移探针的统计结果（没跑过返回 null）。 */
@@ -1026,9 +1030,9 @@ export class HomeScene {
 
   private sampleProbe(): void {
     const p = this.probe;
-    if (!p || performance.now() > p.until) return;
+    if (!p || (this.clock.elapsedTime * 1000) > p.until) return;
     const pos = this.cat?.rig.root.position;
-    if (pos) p.samples.push({ t: performance.now(), x: pos.x, y: pos.y, z: pos.z });
+    if (pos) p.samples.push({ t: (this.clock.elapsedTime * 1000), x: pos.x, y: pos.y, z: pos.z });
   }
 
   /** 主相机站在项圈镜头上（`?view=collar-cam`）：每帧跟随，并隐藏猫自己。 */

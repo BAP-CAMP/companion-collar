@@ -9,6 +9,7 @@ import { mountApp } from './app.ts';
 const root = document.querySelector<HTMLDivElement>('#app');
 if (root) {
   mountApp(root);
+  document.documentElement.dataset.exhibitReady='true';dispatchEvent(new Event('exhibit:ready'));
 } else {
   console.error('找不到 #app 挂载点');
 }
